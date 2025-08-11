@@ -19,7 +19,7 @@ RealMealDeal is a Vue 3 application that helps you discover and explore recipes 
 
 1. Clone the repository  
 ```bash
-git clone https://github.com/yourusername/real-meal-deal.git
+git clone https://github.com/Ro0oman/real-meal-deal.git
 ```
 
 2. Navigate to the project directory  
