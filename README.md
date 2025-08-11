@@ -11,9 +11,6 @@ RealMealDeal is a Vue 3 application that helps you discover and explore recipes 
 - Light and dark theme toggle with smooth transitions  
 - Clean and modern UI built with Vue 3 and Pinia for state management
 
-## Demo
-
-*Add your demo link here if available*
 
 ## Installation
 
