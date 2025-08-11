@@ -10,6 +10,7 @@ export const useMealStore = defineStore('meal', {
     loading: false,
     selectedMeal: null,
     loadingDetails: false,
+    isModalOpen: false,  // <-- nueva propiedad
   }),
   actions: {
     async fetchCategories() {
@@ -24,9 +25,14 @@ export const useMealStore = defineStore('meal', {
       this.loading = false
     },
     async fetchMealDetails(id) {
-    this.loadingDetails = true
-    this.selectedMeal = await getMealDetailsById(id)
-    this.loadingDetails = false
+      this.loadingDetails = true
+      this.selectedMeal = await getMealDetailsById(id)
+      this.loadingDetails = false
+      this.isModalOpen = true   // <-- abrir modal aquí
+    },
+    closeModal() {
+      this.isModalOpen = false
+      this.selectedMeal = null
     },
     clearSelectedMeal() {
       this.selectedMeal = null

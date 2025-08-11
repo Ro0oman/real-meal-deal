@@ -1,26 +1,36 @@
+<script setup>
+import CategoryButtons from './components/CategoryButtons.vue'
+import MealList from './components/MealList.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
+import RecipeModal from './components/RecipeModal.vue'
+import { useMealStore } from './stores/mealStore'
+import { onMounted, computed } from 'vue'
+
+const mealStore = useMealStore()
+const categories = computed(() => mealStore.categories)
+const meals = computed(() => mealStore.meals)
+const selectedCategory = computed(() => mealStore.selectedCategory)
+const loading = computed(() => mealStore.loading)
+
+function handleCategorySelect(category) {
+  mealStore.fetchMeals(category)
+}
+
+function closeModal() {
+  mealStore.closeModal()
+}
+
+onMounted(() => {
+  mealStore.fetchCategories()
+})
+</script>
+
 <template>
-  <!-- <div id="app" class="container">
-    <h1>RealMealDeal</h1>
-    <CategorySelector
-      :categories="categories"
-      :selectedCategory="selectedCategory"
-      @select="handleCategorySelect"
-    />
-
-    <div v-if="loading" class="loading">Loading...</div>
-
-    <MealList v-else :meals="meals" />
-    
-    <RecipeModal
-      v-if="selectedMeal"
-      :meal="selectedMeal"
-      :show="!!selectedMeal"
-      @close="closeModal"
-    />
-  </div> -->
-
-<div class="container">
-    <h1>RealMealDeal</h1>
+  <div class="container">
+    <div class="header">
+      <h1>RealMealDeal</h1>
+      <ThemeToggle />
+    </div>
 
     <CategoryButtons
       :categories="categories"
@@ -31,29 +41,28 @@
     <div v-if="loading" class="loading">Loading...</div>
 
     <MealList v-else :meals="meals" />
-  </div>
 
+    <!-- Aquí añades el modal -->
+    <RecipeModal
+      :meal="mealStore.selectedMeal"
+      :show="mealStore.isModalOpen"
+      @close="closeModal"
+    />
+  </div>
 </template>
 
-<script setup>
-import CategoryButtons from './components/CategoryButtons.vue'
-import MealList from './components/MealList.vue'
-import { useMealStore } from './stores/mealStore'
-import { onMounted, computed } from 'vue'
-
-
-
-const mealStore = useMealStore()
-const categories = computed(() => mealStore.categories)
-const meals = computed(() => mealStore.meals)
-const selectedCategory = computed(() => mealStore.selectedCategory)
-const loading = computed(() => mealStore.loading)
-function handleCategorySelect(category) {
-  mealStore.fetchMeals(category)
+<style scoped>
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-onMounted(() => {
-  mealStore.fetchCategories()
-})
-</script>
-
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--bg-color);
+}
+</style>

@@ -18,12 +18,22 @@
       </ul>
 
       <h3>Instructions</h3>
-      <p v-html="meal.strInstructions"></p>
+        <p v-html="formattedInstructions"></p>
 
-      <div v-if="meal.strYoutube">
-        <h3>Video Tutorial</h3>
-        <a :href="meal.strYoutube" target="_blank">{{ meal.strYoutube }}</a>
-      </div>
+
+
+<div v-if="meal.strYoutube" class="video-container">
+  <h3>Video Tutorial</h3>
+  <iframe
+    :src="youtubeEmbedUrl"
+    frameborder="0" 
+    width="100%"
+    height="315"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    title="YouTube video"
+  ></iframe>
+</div>
     </div>
   </div>
 </template>
@@ -35,7 +45,30 @@ import { defineProps, defineEmits } from 'vue'
 const props = defineProps({
   meal: Object,
   show: Boolean,
+
 })
+
+const youtubeEmbedUrl = computed(() => {
+  if (!props.meal?.strYoutube) return ''
+  // Extraer el ID del video de la URL de YouTube
+  const url = props.meal.strYoutube
+  const videoIdMatch = url.match(/v=([a-zA-Z0-9_-]{11})/)
+  const videoId = videoIdMatch ? videoIdMatch[1] : ''
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : ''
+})
+
+const formattedInstructions = computed(() => {
+  if (!props.meal || !props.meal.strInstructions) return ''
+  // Reemplaza saltos por <br> y además escapa caracteres especiales para evitar problemas
+  return props.meal.strInstructions
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>')
+})
+
+
+
 
 const emit = defineEmits(['close'])
 
@@ -68,54 +101,7 @@ function getIngredientImage(name) {
 </script>
 
 <style scoped>
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-.modal-content {
-  background: white;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-}
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-.meal-image {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-.ingredient-thumb {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
+.instructions {
+  white-space: pre-wrap; /* respeta saltos de línea y espacios */
 }
 </style>

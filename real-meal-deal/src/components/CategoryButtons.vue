@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="category-buttons"
-    :class="{ 'no-selection': !selectedCategory }"
-  >
+    
+  <div :class="['category-buttons', { 'no-selection': !selectedCategory }]">
     <button
       v-for="cat in categories"
       :key="cat.strCategory"
@@ -51,29 +49,23 @@ function categoryIcon(cat) {
 .category-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
   justify-content: flex-start;
-  transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
-/* Cuando no hay selección, botones grandes que ocupan todo el ancho */
+/* Cuando NO hay categoría seleccionada, botones grandes en grid 3 columnas iguales */
 .category-buttons.no-selection {
-  justify-content: space-between;
-}
-
-.category-buttons.no-selection .category-btn {
-  flex: 1 1 calc(33.33% - 10px); /* 3 botones por fila sin espacios */
-  max-width: none;
-  font-size: 1.2rem;
-  padding: 15px 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
 /* Botones normales */
 .category-btn {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  background: white;
+  padding: 10px 18px;
+  border: 1px solid var(--border-color, #ccc);
+  background: var(--btn-bg, white);
   border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
@@ -83,8 +75,23 @@ function categoryIcon(cat) {
   transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
   user-select: none;
   max-width: 200px;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Botones grandes cuando no hay selección */
+.category-buttons.no-selection .category-btn {
+  max-width: none;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  padding: 18px 0;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Botón seleccionado */
 .category-btn.selected {
   background-color: #42b983;
   border-color: #42b983;
@@ -93,6 +100,7 @@ function categoryIcon(cat) {
   box-shadow: 0 4px 12px rgba(66, 185, 131, 0.5);
 }
 
+/* Hover en botones no seleccionados */
 .category-btn:hover:not(.selected) {
   background-color: #e0f3ec;
   transform: scale(1.03);

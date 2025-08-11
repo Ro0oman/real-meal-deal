@@ -20,6 +20,7 @@ const mealStore = useMealStore()
 
 function openModal() {
   mealStore.fetchMealDetails(props.meal.idMeal)
+
 }
 
 </script>
